@@ -1,0 +1,59 @@
+@keyframes withering {
+    0% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: translateX(-50%) scale(0.8) rotate(5deg); opacity: 0.7; }
+    100% { transform: translateX(-50%) scale(0) rotate(-10deg); opacity: 0; }
+}
+
+@keyframes grow {
+    from { transform: translateX(-50%) scale(0.8); }
+    to { transform: translateX(-50%) scale(1); }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translate(-50%, -10px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.animate-withering { animation: withering 3s ease-in-out; }
+.animate-grow { animation: grow 0.5s ease-out; }
+.animate-fade-in { animation: fade-in 0.5s ease-out; }
+
+.tree-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.ground {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 20px;
+    background: #5B3E31;
+    border-radius: 50%;
+}
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.dialog-content {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
