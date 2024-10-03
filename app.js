@@ -1,5 +1,3 @@
-const { useState, useEffect } = React;
-
 const Dialog = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
     
@@ -25,10 +23,11 @@ const Tree = ({ progress, isWithering }) => {
     
     const treeStyle = {
         position: 'absolute',
-        bottom: '20px',
+        bottom: '0',
         left: '50%',
         transform: 'translateX(-50%)',
         transition: 'all 0.5s',
+        zIndex: 10,
     };
     
     if (progress < 50) {
@@ -58,17 +57,17 @@ const Tree = ({ progress, isWithering }) => {
 };
 
 const ForestTimer = () => {
-    const SESSION_TIME = 25 * 60;
-    const [timeLeft, setTimeLeft] = useState(SESSION_TIME);
-    const [isActive, setIsActive] = useState(false);
-    const [trees, setTrees] = useState([]);
-    const [isWithering, setIsWithering] = useState(false);
-    const [showWitherMessage, setShowWitherMessage] = useState(false);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [timeLeft, setTimeLeft] = React.useState(25 * 60);
+    const [isActive, setIsActive] = React.useState(false);
+    const [trees, setTrees] = React.useState([]);
+    const [isWithering, setIsWithering] = React.useState(false);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+    const [showSuccess, setShowSuccess] = React.useState(false);
 
+    const SESSION_TIME = 25 * 60;
     const growthProgress = ((SESSION_TIME - timeLeft) / SESSION_TIME) * 100;
 
-    useEffect(() => {
+    React.useEffect(() => {
         let interval = null;
         if (isActive && timeLeft > 0) {
             interval = setInterval(() => {
@@ -76,103 +75,64 @@ const ForestTimer = () => {
             }, 1000);
         } else if (timeLeft === 0) {
             setIsActive(false);
-            setTrees(prevTrees => [...prevTrees, {
-                id: prevTrees.length + 1,
-                plantedAt: new Date(),
-                isNew: true
-            }]);
+            const newTree = {
+                id: Date.now(),
+                plantedAt: new Date().toISOString()
+            };
+            setTrees([...trees, newTree]);
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 3000);
             setTimeLeft(SESSION_TIME);
         }
         return () => clearInterval(interval);
     }, [isActive, timeLeft]);
 
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (isActive && document.hidden) {
-                stopSession('You switched tabs or apps. Your tree withered.');
-            }
-        };
-
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }, [isActive]);
-
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-    };
-
-    const startSession = () => {
-        setIsActive(true);
-        setIsWithering(false);
-        setShowWitherMessage(false);
-    };
-
-    const stopSession = (message = 'Session stopped. Your tree withered.') => {
-        setIsActive(false);
-        setIsWithering(true);
-        setShowWitherMessage(message);
-        
-        setTimeout(() => {
-            setTimeLeft(SESSION_TIME);
+    const handleStart = () => {
+        if (!isActive) {
+            setIsActive(true);
             setIsWithering(false);
-            setTimeout(() => setShowWitherMessage(false), 2000);
-        }, 3000);
+        }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-green-200">
-                <div className="p-8">
+        <div className="min-h-screen natural-background">
+            <div className="sky"></div>
+            <div className="cloud"></div>
+            <div className="cloud"></div>
+            <div className="cloud"></div>
+            <div className="grass"></div>
+            
+            <div className="content-container">
+                <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl border border-green-200 p-8 w-full max-w-md">
                     <div className="flex flex-col items-center">
-                        <h1 className="text-3xl font-bold text-green-800 mb-6">Focus Forest</h1>
+                        <h1 className="text-3xl font-bold text-green-800 mb-6 text-center">Focus Forest</h1>
                         
                         <div className="tree-container mb-6">
                             <div className="ground"></div>
                             <Tree progress={growthProgress} isWithering={isWithering} />
-                            {showWitherMessage && (
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm animate-fade-in mt-4">
-                                    {showWitherMessage}
-                                </div>
-                            )}
                         </div>
                         
-                        <div className="text-5xl font-bold text-green-800 mb-8 font-mono">
-                            {formatTime(timeLeft)}
+                        <div className="timer-display mb-8">
+                            {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
                         </div>
                         
-                        <div className="flex w-full space-x-4 mb-4">
-                            <button 
-                                onClick={startSession}
-                                className={`flex-1 px-6 py-3 rounded-lg text-lg font-semibold transition-all ${
-                                    isActive 
-                                        ? 'bg-green-100 text-green-400 cursor-not-allowed' 
-                                        : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg'
-                                }`}
-                                disabled={isActive}
-                            >
-                                Start
-                            </button>
-                            <button 
-                                onClick={() => stopSession()}
-                                className={`flex-1 px-6 py-3 rounded-lg text-lg font-semibold transition-all ${
-                                    !isActive 
-                                        ? 'bg-red-100 text-red-400 cursor-not-allowed' 
-                                        : 'bg-red-600 text-white hover:bg-red-700 hover:shadow-lg'
-                                }`}
-                                disabled={!isActive}
-                            >
-                                Stop
-                            </button>
-                        </div>
+                        <button 
+                            onClick={handleStart}
+                            className={`w-full px-6 py-3 rounded-lg text-lg font-semibold transition-all ${
+                                isActive 
+                                    ? 'bg-green-100 text-green-400 cursor-not-allowed' 
+                                    : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg'
+                            }`}
+                            disabled={isActive}
+                        >
+                            {isActive ? 'Focus in progress...' : 'Start Focus'}
+                        </button>
 
                         <button 
                             onClick={() => setIsDialogOpen(true)}
-                            className="w-full px-6 py-3 bg-green-600 text-white rounded-lg text-lg font-semibold hover:bg-green-700 transition-all hover:shadow-lg flex items-center justify-center"
+                            className="w-full mt-4 px-6 py-3 bg-green-600 text-white rounded-lg text-lg font-semibold hover:bg-green-700 transition-all hover:shadow-lg"
                         >
-                            <Tree progress={100} isWithering={false} />
-                            <span className="ml-2">Your Forest ({trees.length} trees)</span>
+                            Your Forest ({trees.length} trees)
                         </button>
                     </div>
                 </div>
@@ -182,7 +142,6 @@ const ForestTimer = () => {
                 <div className="p-4">
                     {trees.length === 0 ? (
                         <div className="text-center py-8 text-green-600">
-                            <Tree progress={100} isWithering={false} />
                             <p className="mt-4 text-lg">Your forest is empty. Complete a focus session to grow your first tree!</p>
                         </div>
                     ) : (
@@ -191,7 +150,7 @@ const ForestTimer = () => {
                                 <div key={tree.id} className="flex flex-col items-center p-4 bg-green-50 rounded-lg">
                                     <Tree progress={100} isWithering={false} />
                                     <span className="mt-2 text-sm text-green-700">
-                                        {tree.plantedAt.toLocaleDateString()}
+                                        {new Date(tree.plantedAt).toLocaleDateString()}
                                     </span>
                                 </div>
                             ))}
@@ -199,6 +158,13 @@ const ForestTimer = () => {
                     )}
                 </div>
             </Dialog>
+
+            {showSuccess && (
+                <div className="success-message">
+                    <h2 className="text-xl font-bold mb-2">Congratulations!</h2>
+                    <p>Your tree has grown fully. Great work on staying focused!</p>
+                </div>
+            )}
         </div>
     );
 };
