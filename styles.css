@@ -3,17 +3,14 @@
     50% { transform: translateX(-50%) scale(0.8) rotate(5deg); opacity: 0.7; }
     100% { transform: translateX(-50%) scale(0) rotate(-10deg); opacity: 0; }
 }
-
 @keyframes grow {
     from { transform: translateX(-50%) scale(0.8); }
     to { transform: translateX(-50%) scale(1); }
 }
-
 @keyframes fade-in {
     from { opacity: 0; transform: translate(-50%, -10px); }
     to { opacity: 1; transform: translate(-50%, 0); }
 }
-
 @keyframes float {
     from { transform: translateX(-100%); }
     to { transform: translateX(1000%); }
@@ -47,110 +44,9 @@
 .natural-background {
     position: relative;
     overflow: hidden;
-    min-height: 100vh;
 }
 
 .sky {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
-}
-
-.cloud {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: float 60s linear infinite;
-}
-
-.cloud:nth-child(1) {
-    width: 100px;
-    height: 40px;
-    top: 10%;
-    animation-duration: 80s;
-}
-
-.cloud:nth-child(2) {
-    width: 60px;
-    height: 24px;
-    top: 20%;
-    animation-duration: 100s;
-    animation-delay: -20s;
-}
-
-.cloud:nth-child(3) {
-    width: 120px;
-    height: 48px;
-    top: 15%;
-    animation-duration: 120s;
-    animation-delay: -60s;
-}
-
-.grass {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    background: linear-gradient(to top, #4CAF50, #8BC34A);
-}
-
-.content-container {
-    position: relative;
-    z-index: 20;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2rem;
-}
-
-.timer-display {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #2C3E50;
-}
-
-.dialog-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.dialog-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    max-width: 90%;
-    max-height: 90%;
-    overflow-y: auto;
-}
-
-.success-message, .failure-message {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #4CAF50;
-    color: white;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    text-align: center;
-    z-index: 1000;
-    animation: fade-in 0.5s ease-out;
-}
-
-.failure-message {
-    background-color: #EF4444;
-}
