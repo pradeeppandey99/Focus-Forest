@@ -32,56 +32,27 @@ const Tree = ({ progress, isWithering, isActive }) => {
         zIndex: 10,
     };
     
-    // Sapling shape
-    if (!isActive || progress < 50) {
+    if (progress < 50) {
         return (
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={currentSize}
-                height={currentSize}
-                viewBox="0 0 24 24"
+            <svg xmlns="http://www.w3.org/2000/svg" width={currentSize} height={currentSize} viewBox="0 0 24 24" 
                 className={`transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`}
-                style={treeStyle}
-            >
-                <path 
-                    d="M12 3v13M12 6l-2 2M12 6l2 2M12 10l-2 2M12 10l2 2M12 14l-2 2M12 14l2 2" 
-                    stroke={treeColor}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                />
-                <ellipse
-                    cx="12"
-                    cy="21"
-                    rx="5"
-                    ry="1"
-                    fill="#8B4513"
-                />
+                style={treeStyle}>
+                <path d="M12 8C12 8 12 2 18 2C18 8 12 8 12 8" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
+                <path d="M12 8C12 8 12 2 6 2C6 8 12 8 12 8" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
+                <line x1="12" y1="8" x2="12" y2="22" stroke={treeColor} strokeWidth="2"/>
+                <path d="M12 14C12 14 12 8 18 8C18 14 12 14 12 14" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
+                <path d="M12 14C12 14 12 8 6 8C6 14 12 14 12 14" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
             </svg>
         );
     } else {
-        // Full tree shape
         return (
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={currentSize}
-                height={currentSize}
-                viewBox="0 0 24 24"
+            <svg xmlns="http://www.w3.org/2000/svg" width={currentSize} height={currentSize} viewBox="0 0 24 24" 
                 className={`transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`}
-                style={treeStyle}
-            >
-                <path 
-                    d="M12 2L5 22h14L12 2z" 
-                    fill={treeColor} 
-                />
-                <rect 
-                    x="11" 
-                    y="20" 
-                    width="2" 
-                    height="4" 
-                    fill="#8B4513" 
-                />
+                style={treeStyle}>
+                <path d="M12,2L8,9L16,9Z" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
+                <path d="M12,6L7,14L17,14Z" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
+                <path d="M12,10L6,19L18,19Z" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
+                <rect x="11" y="19" width="2" height="3" fill="#5B3E31"/>
             </svg>
         );
     }
