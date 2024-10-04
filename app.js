@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
+console.log("app.js is loading");
 
 const Dialog = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
     
-    return (
-        <div className="dialog-overlay">
-            <div className="dialog-content">
-                <div className="flex justify-between items-start">
-                    <h2 className="text-2xl font-bold text-green-800">Your Forest</h2>
-                    <button onClick={onClose} className="text-green-800 text-2xl">×</button>
-                </div>
-                {children}
-            </div>
-        </div>
+    return React.createElement('div', { className: "dialog-overlay" },
+        React.createElement('div', { className: "dialog-content" },
+            React.createElement('div', { className: "flex justify-between items-start" },
+                React.createElement('h2', { className: "text-2xl font-bold text-green-800" }, "Your Forest"),
+                React.createElement('button', { onClick: onClose, className: "text-green-800 text-2xl" }, "×")
+            ),
+            children
+        )
     );
 };
 
@@ -25,55 +23,79 @@ const Tree = ({ progress, isWithering, isActive }) => {
     
     const treeStyle = {
         position: 'absolute',
-        bottom: '0', // Changed from '10px' to '0' to remove the gap
+        bottom: '0',
         left: '50%',
         transform: 'translateX(-50%)',
         transition: 'all 0.5s',
         zIndex: 10,
     };
     
-    if (progress < 50) {
-        return (
-            <svg xmlns="http://www.w3.org/2000/svg" width={currentSize} height={currentSize} viewBox="0 0 24 24" 
-                className={`transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`}
-                style={treeStyle}>
-                <path d="M12 8C12 8 12 2 18 2C18 8 12 8 12 8" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
-                <path d="M12 8C12 8 12 2 6 2C6 8 12 8 12 8" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
-                <line x1="12" y1="8" x2="12" y2="22" stroke={treeColor} strokeWidth="2"/>
-                <path d="M12 14C12 14 12 8 18 8C18 14 12 14 12 14" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
-                <path d="M12 14C12 14 12 8 6 8C6 14 12 14 12 14" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
-            </svg>
+    // Sapling shape
+    if (!isActive || progress < 50) {
+        return React.createElement('svg', {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: currentSize,
+            height: currentSize,
+            viewBox: "0 0 24 24",
+            className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
+            style: treeStyle
+        },
+            React.createElement('path', { 
+                d: "M12 3v13M12 6l-2 2M12 6l2 2M12 10l-2 2M12 10l2 2M12 14l-2 2M12 14l2 2", 
+                stroke: treeColor,
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                fill: "none"
+            }),
+            React.createElement('ellipse', {
+                cx: "12",
+                cy: "21",
+                rx: "5",
+                ry: "1",
+                fill: "#8B4513"
+            })
         );
     } else {
-        return (
-            <svg xmlns="http://www.w3.org/2000/svg" width={currentSize} height={currentSize} viewBox="0 0 24 24" 
-                className={`transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`}
-                style={treeStyle}>
-                <path d="M12,2L8,9L16,9Z" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
-                <path d="M12,6L7,14L17,14Z" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
-                <path d="M12,10L6,19L18,19Z" stroke={treeColor} fill={treeColor} strokeWidth="0.5"/>
-                <rect x="11" y="19" width="2" height="3" fill="#5B3E31"/>
-            </svg>
+        // Full tree shape
+        return React.createElement('svg', {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: currentSize,
+            height: currentSize,
+            viewBox: "0 0 24 24",
+            className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
+            style: treeStyle
+        },
+            React.createElement('path', { 
+                d: "M12 2L5 22h14L12 2z", 
+                fill: treeColor 
+            }),
+            React.createElement('rect', { 
+                x: "11", 
+                y: "20", 
+                width: "2", 
+                height: "4", 
+                fill: "#8B4513" 
+            })
         );
     }
 };
 
 const ForestTimer = () => {
-    const [timeLeft, setTimeLeft] = useState(25 * 60);
-    const [isActive, setIsActive] = useState(false);
-    const [trees, setTrees] = useState([]);
-    const [isWithering, setIsWithering] = useState(false);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [showWarning, setShowWarning] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
-    const [wakeLock, setWakeLock] = useState(null);
-    const [showFailureMessage, setShowFailureMessage] = useState(false);
+    const [timeLeft, setTimeLeft] = React.useState(25 * 60);
+    const [isActive, setIsActive] = React.useState(false);
+    const [trees, setTrees] = React.useState([]);
+    const [isWithering, setIsWithering] = React.useState(false);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+    const [showSuccess, setShowSuccess] = React.useState(false);
+    const [showWarning, setShowWarning] = React.useState(false);
+    const [isMobile, setIsMobile] = React.useState(false);
+    const [wakeLock, setWakeLock] = React.useState(null);
 
     const SESSION_TIME = 25 * 60;
     const growthProgress = ((SESSION_TIME - timeLeft) / SESSION_TIME) * 100;
 
-    useEffect(() => {
+    React.useEffect(() => {
         const checkMobile = () => {
             setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         };
@@ -96,7 +118,7 @@ const ForestTimer = () => {
         };
     }, [isActive, isMobile]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         let interval = null;
         if (isActive && timeLeft > 0) {
             interval = setInterval(() => {
@@ -108,7 +130,7 @@ const ForestTimer = () => {
         return () => clearInterval(interval);
     }, [isActive, timeLeft]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const requestWakeLock = async () => {
             if (isActive && 'wakeLock' in navigator) {
                 try {
@@ -142,7 +164,6 @@ const ForestTimer = () => {
     const handleStart = () => {
         setIsActive(true);
         setIsWithering(false);
-        setShowFailureMessage(false);
     };
 
     const handleSuccess = () => {
@@ -162,7 +183,6 @@ const ForestTimer = () => {
         setIsActive(false);
         setIsWithering(true);
         setTimeLeft(SESSION_TIME);
-        setShowFailureMessage(true);
         setTimeout(() => setIsWithering(false), 3000);
     };
 
@@ -175,98 +195,79 @@ const ForestTimer = () => {
         handleFail();
     };
 
-    return (
-        <div className="min-h-screen natural-background">
-            <div className="sky"></div>
-            <div className="cloud"></div>
-            <div className="cloud"></div>
-            <div className="cloud"></div>
-            <div className="grass"></div>
-            <div className="content-container">
-                <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl border border-green-200 p-8 w-full max-w-md">
-                    <div className="flex flex-col items-center">
-                        <h1 className="text-3xl font-bold text-green-800 mb-6 text-center">Focus Forest</h1>
-                        <div className="tree-container mb-6">
-                            <div className="ground"></div>
-                            <Tree progress={growthProgress} isWithering={isWithering} isActive={isActive} />
-                        </div>
-                        <div className="timer-display mb-8">
-                            {`${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`}
-                        </div>
-                        <button
-                            onClick={handleStart}
-                            className={`w-full px-6 py-3 rounded-lg text-lg font-semibold transition-all ${
-                                isActive 
-                                    ? 'bg-green-100 text-green-400 cursor-not-allowed' 
-                                    : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg'
-                            }`}
-                            disabled={isActive}
-                        >
-                            {isActive ? 'Focus in progress...' : 'Start Focus'}
-                        </button>
-                        <button
-                            onClick={() => setIsDialogOpen(true)}
-                            className="w-full mt-4 px-6 py-3 bg-green-600 text-white rounded-lg text-lg font-semibold hover:bg-green-700 transition-all hover:shadow-lg"
-                        >
-                            {`Your Forest (${trees.length} trees)`}
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
-                <div className="p-4">
-                    {trees.length === 0 ? (
-                        <div className="text-center py-8 text-green-600">
-                            <p className="mt-4 text-lg">Your forest is empty. Complete a focus session to grow your first tree!</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                            {trees.map(tree => (
-                                <div key={tree.id} className="flex flex-col items-center p-4 bg-green-50 rounded-lg">
-                                    <Tree progress={100} isWithering={false} isActive={false} />
-                                    <span className="mt-2 text-sm text-green-700">
-                                        {new Date(tree.plantedAt).toLocaleDateString()}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </Dialog>
-            {showSuccess && (
-                <div className="success-message">
-                    <h2 className="text-xl font-bold mb-2">Congratulations!</h2>
-                    <p>Your tree has grown fully. Great work on staying focused!</p>
-                </div>
-            )}
-            {showFailureMessage && (
-                <div className="failure-message">
-                    <h2 className="text-xl font-bold mb-2">Oh no!</h2>
-                    <p>You lost your focus and the plant withered.</p>
-                </div>
-            )}
-            <Dialog isOpen={showWarning} onClose={() => setShowWarning(false)}>
-                <div className="p-4">
-                    <h2 className="text-xl font-bold mb-4 text-red-600">Warning!</h2>
-                    <p className="mb-4">The focus activity will fail and the tree will disintegrate if you leave.</p>
-                    <div className="flex justify-end space-x-4">
-                        <button
-                            onClick={handleContinue}
-                            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                        >
-                            Continue
-                        </button>
-                        <button
-                            onClick={handleLeave}
-                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                        >
-                            Leave
-                        </button>
-                    </div>
-                </div>
-            </Dialog>
-        </div>
+    return React.createElement('div', { className: "min-h-screen natural-background" },
+        React.createElement('div', { className: "sky" }),
+        React.createElement('div', { className: "cloud" }),
+        React.createElement('div', { className: "cloud" }),
+        React.createElement('div', { className: "cloud" }),
+        React.createElement('div', { className: "grass" }),
+        React.createElement('div', { className: "content-container" },
+            React.createElement('div', { className: "bg-white bg-opacity-90 rounded-2xl shadow-2xl border border-green-200 p-8 w-full max-w-md" },
+                React.createElement('div', { className: "flex flex-col items-center" },
+                    React.createElement('h1', { className: "text-3xl font-bold text-green-800 mb-6 text-center" }, "Focus Forest"),
+                    React.createElement('div', { className: "tree-container mb-6" },
+                        React.createElement('div', { className: "ground" }),
+                        React.createElement(Tree, { progress: growthProgress, isWithering: isWithering, isActive: isActive })
+                    ),
+                    React.createElement('div', { className: "timer-display mb-8" },
+                        `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`
+                    ),
+                    React.createElement('button', {
+                        onClick: handleStart,
+                        className: `w-full px-6 py-3 rounded-lg text-lg font-semibold transition-all ${
+                            isActive 
+                                ? 'bg-green-100 text-green-400 cursor-not-allowed' 
+                                : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg'
+                        }`,
+                        disabled: isActive
+                    }, isActive ? 'Focus in progress...' : 'Start Focus'),
+                    React.createElement('button', {
+                        onClick: () => setIsDialogOpen(true),
+                        className: "w-full mt-4 px-6 py-3 bg-green-600 text-white rounded-lg text-lg font-semibold hover:bg-green-700 transition-all hover:shadow-lg"
+                    }, `Your Forest (${trees.length} trees)`)
+                )
+            )
+        ),
+        React.createElement(Dialog, { isOpen: isDialogOpen, onClose: () => setIsDialogOpen(false) },
+            React.createElement('div', { className: "p-4" },
+                trees.length === 0
+                    ? React.createElement('div', { className: "text-center py-8 text-green-600" },
+                        React.createElement('p', { className: "mt-4 text-lg" }, "Your forest is empty. Complete a focus session to grow your first tree!")
+                    )
+                    : React.createElement('div', { className: "grid grid-cols-2 sm:grid-cols-3 gap-6" },
+                        trees.map(tree => 
+                            React.createElement('div', { key: tree.id, className: "flex flex-col items-center p-4 bg-green-50 rounded-lg" },
+                                React.createElement(Tree, { progress: 100, isWithering: false, isActive: false }),
+                                React.createElement('span', { className: "mt-2 text-sm text-green-700" },
+                                    new Date(tree.plantedAt).toLocaleDateString()
+                                )
+                            )
+                        )
+                    )
+            )
+        ),
+        showSuccess && React.createElement('div', { className: "success-message" },
+            React.createElement('h2', { className: "text-xl font-bold mb-2" }, "Congratulations!"),
+            React.createElement('p', null, "Your tree has grown fully. Great work on staying focused!")
+        ),
+        showWarning && React.createElement(Dialog, { isOpen: showWarning, onClose: () => setShowWarning(false) },
+            React.createElement('div', { className: "p-4" },
+                React.createElement('h2', { className: "text-xl font-bold mb-4 text-red-600" }, "Warning!"),
+                React.createElement('p', { className: "mb-4" }, "The focus activity will fail and the tree will disintegrate if you leave."),
+                React.createElement('div', { className: "flex justify-end space-x-4" },
+                    React.createElement('button', {
+                        onClick: handleContinue,
+                        className: "px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                    }, "Continue"),
+                    React.createElement('button', {
+                        onClick: handleLeave,
+                        className: "px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    }, "Leave")
+                )
+            )
+        )
     );
 };
 
-export default ForestTimer;
+console.log("Rendering ForestTimer component");
+ReactDOM.render(React.createElement(ForestTimer), document.getElementById('root'));
