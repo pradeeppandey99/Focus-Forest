@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tree Growing Game</title>
+    <title>Plant Growth Timer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,25 +17,18 @@
     </div>
     <div class="content-container">
         <div class="tree-container">
-            <svg class="sapling" viewBox="0 0 100 100" width="100" height="100">
-                <path d="M50 90 L50 40 M30 60 Q50 40 70 60 M40 40 Q50 20 60 40" stroke="#4CAF50" stroke-width="4" fill="none"/>
-            </svg>
-            <svg class="tree" viewBox="0 0 100 100" width="100" height="100" style="display: none;">
-                <path d="M50 90 L50 30 M30 70 Q50 20 70 70 M20 50 Q50 0 80 50" stroke="#2E7D32" stroke-width="6" fill="none"/>
-            </svg>
+            <img id="tree" src="tree-stage-0.png" alt="Tree" class="animate-grow">
             <div class="ground"></div>
         </div>
-        <div class="timer-display"></div>
+        <div class="timer-display" id="timer">0:00</div>
+        <button id="start-button">Start</button>
     </div>
-    <div id="dialogOverlay" class="dialog-overlay" style="display: none;">
+    <div class="dialog-overlay" id="dialog-overlay">
         <div class="dialog-content">
-            <h2>Congratulations!</h2>
-            <p>You've successfully grown a tree!</p>
-            <button onclick="restartGame()">Play Again</button>
+            <p id="dialog-content"></p>
+            <button id="close-dialog">Close</button>
         </div>
     </div>
-    <div id="successMessage" class="success-message" style="display: none;">Tree grown successfully!</div>
-    <div id="failureMessage" class="failure-message" style="display: none;">You lost your focus and the plant withered</div>
     <script src="script.js"></script>
 </body>
 </html>
