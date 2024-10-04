@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Dialog = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
@@ -25,7 +25,7 @@ const Tree = ({ progress, isWithering, isActive }) => {
     
     const treeStyle = {
         position: 'absolute',
-        bottom: '0', // Changed from '10px' to '0'
+        bottom: '0', // Changed from '10px' to '0' to remove the gap
         left: '50%',
         transform: 'translateX(-50%)',
         transition: 'all 0.5s',
@@ -59,21 +59,21 @@ const Tree = ({ progress, isWithering, isActive }) => {
 };
 
 const ForestTimer = () => {
-    const [timeLeft, setTimeLeft] = React.useState(25 * 60);
-    const [isActive, setIsActive] = React.useState(false);
-    const [trees, setTrees] = React.useState([]);
-    const [isWithering, setIsWithering] = React.useState(false);
-    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-    const [showSuccess, setShowSuccess] = React.useState(false);
-    const [showWarning, setShowWarning] = React.useState(false);
-    const [isMobile, setIsMobile] = React.useState(false);
-    const [wakeLock, setWakeLock] = React.useState(null);
-    const [showFailureMessage, setShowFailureMessage] = React.useState(false);
+    const [timeLeft, setTimeLeft] = useState(25 * 60);
+    const [isActive, setIsActive] = useState(false);
+    const [trees, setTrees] = useState([]);
+    const [isWithering, setIsWithering] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showWarning, setShowWarning] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [wakeLock, setWakeLock] = useState(null);
+    const [showFailureMessage, setShowFailureMessage] = useState(false);
 
     const SESSION_TIME = 25 * 60;
     const growthProgress = ((SESSION_TIME - timeLeft) / SESSION_TIME) * 100;
 
-    React.useEffect(() => {
+    useEffect(() => {
         const checkMobile = () => {
             setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         };
@@ -96,7 +96,7 @@ const ForestTimer = () => {
         };
     }, [isActive, isMobile]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         let interval = null;
         if (isActive && timeLeft > 0) {
             interval = setInterval(() => {
@@ -108,7 +108,7 @@ const ForestTimer = () => {
         return () => clearInterval(interval);
     }, [isActive, timeLeft]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const requestWakeLock = async () => {
             if (isActive && 'wakeLock' in navigator) {
                 try {
