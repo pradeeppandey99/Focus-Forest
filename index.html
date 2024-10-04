@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plant Growth Timer</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Focus Forest</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="natural-background">
-        <div class="sky">
-            <div class="cloud"></div>
-            <div class="cloud"></div>
-            <div class="cloud"></div>
-        </div>
-        <div class="grass"></div>
-    </div>
-    <div class="content-container">
-        <div class="tree-container">
-            <img id="tree" src="tree-stage-0.png" alt="Tree" class="animate-grow">
-            <div class="ground"></div>
-        </div>
-        <div class="timer-display" id="timer">0:00</div>
-        <button id="start-button">Start</button>
-    </div>
-    <div class="dialog-overlay" id="dialog-overlay">
-        <div class="dialog-content">
-            <p id="dialog-content"></p>
-            <button id="close-dialog">Close</button>
-        </div>
-    </div>
-    <script src="script.js"></script>
+    <div id="root"></div>
+
+    <!-- React and ReactDOM CDN -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+
+    <!-- Babel for JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Your React component -->
+    <script type="text/babel" src="app.js"></script>
+
+    <script type="text/babel">
+        ReactDOM.render(
+            <React.StrictMode>
+                <ForestTimer />
+            </React.StrictMode>,
+            document.getElementById('root')
+        );
+    </script>
 </body>
 </html>
