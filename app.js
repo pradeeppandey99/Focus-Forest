@@ -68,6 +68,9 @@ startButton.addEventListener('click', startTimer);
 closeDialog.addEventListener('click', hideDialog);
 
 // Add this new code to handle window focus changes
+// Your existing JavaScript code here...
+
+// Add the new code here, near the end of the file
 let plantDied = false;
 
 document.addEventListener('visibilitychange', function() {
@@ -93,3 +96,6 @@ function showMessage(text, isFailure = false) {
     messageElement.remove();
   }, 3000);
 }
+
+// Any existing event listeners or initialization code would go here
+// document.addEventListener('DOMContentLoaded', function() { ... });
