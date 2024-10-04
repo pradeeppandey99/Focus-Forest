@@ -20,19 +20,17 @@ const Tree = ({ progress, isWithering, isActive }) => {
     const currentSize = baseSize + (progress / 100) * (maxSize - baseSize);
     
     const treeColor = isWithering ? '#EF4444' : (isActive ? '#15803D' : '#22C55E');
-    const trunkColor = '#8B4513';
     
     const treeStyle = {
         position: 'absolute',
-        bottom: '10px',
+        bottom: '0',
         left: '50%',
         transform: 'translateX(-50%)',
         transition: 'all 0.5s',
         zIndex: 10,
     };
     
-    // Sapling shape
-    if (!isActive || progress < 50) {
+    if (progress < 50) {
         return React.createElement('svg', {
             xmlns: "http://www.w3.org/2000/svg",
             width: currentSize,
@@ -41,23 +39,13 @@ const Tree = ({ progress, isWithering, isActive }) => {
             className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
             style: treeStyle
         },
-            // Trunk
-            React.createElement('path', {
-                d: "M12 22V12",
-                stroke: trunkColor,
-                strokeWidth: "2",
-                strokeLinecap: "round"
-            }),
-            // Leaves
-            React.createElement('path', {
-                d: "M12 12C12 12 9 9 9 6C9 3 12 2 12 2C12 2 15 3 15 6C15 9 12 12 12 12Z",
-                fill: treeColor,
-                stroke: treeColor,
-                strokeWidth: "0.5"
-            })
+            React.createElement('path', { d: "M12 8C12 8 12 2 18 2C18 8 12 8 12 8", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
+            React.createElement('path', { d: "M12 8C12 8 12 2 6 2C6 8 12 8 12 8", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
+            React.createElement('line', { x1: "12", y1: "8", x2: "12", y2: "22", stroke: treeColor, strokeWidth: "2" }),
+            React.createElement('path', { d: "M12 14C12 14 12 8 18 8C18 14 12 14 12 14", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
+            React.createElement('path', { d: "M12 14C12 14 12 8 6 8C6 14 12 14 12 14", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" })
         );
     } else {
-        // Full tree shape
         return React.createElement('svg', {
             xmlns: "http://www.w3.org/2000/svg",
             width: currentSize,
@@ -66,27 +54,10 @@ const Tree = ({ progress, isWithering, isActive }) => {
             className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
             style: treeStyle
         },
-            // Trunk
-            React.createElement('path', {
-                d: "M12 22V8",
-                stroke: trunkColor,
-                strokeWidth: "2",
-                strokeLinecap: "round"
-            }),
-            // Tree body
-            React.createElement('path', {
-                d: "M12 8C12 8 5 8 2 14C2 20 12 22 12 22C12 22 22 20 22 14C19 8 12 8 12 8Z",
-                fill: treeColor,
-                stroke: treeColor,
-                strokeWidth: "0.5"
-            }),
-            // Upper part
-            React.createElement('path', {
-                d: "M12 2C12 2 7 4 7 8C7 12 12 14 12 14C12 14 17 12 17 8C17 4 12 2 12 2Z",
-                fill: treeColor,
-                stroke: treeColor,
-                strokeWidth: "0.5"
-            })
+            React.createElement('path', { d: "M12,2L8,9L16,9Z", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
+            React.createElement('path', { d: "M12,6L7,14L17,14Z", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
+            React.createElement('path', { d: "M12,10L6,19L18,19Z", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
+            React.createElement('rect', { x: "11", y: "19", width: "2", height: "3", fill: "#5B3E31" })
         );
     }
 };
