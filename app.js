@@ -14,12 +14,12 @@ const Dialog = ({ isOpen, onClose, children }) => {
     );
 };
 
-const Tree = ({ progress, isWithering }) => {
+const Tree = ({ progress, isWithering, isActive }) => {
     const baseSize = 48;
     const maxSize = 120;
     const currentSize = baseSize + (progress / 100) * (maxSize - baseSize);
     
-    const treeColor = isWithering ? '#EF4444' : '#15803D';
+    const treeColor = isWithering ? '#EF4444' : (isActive ? '#15803D' : '#22C55E');
     
     const treeStyle = {
         position: 'absolute',
@@ -30,7 +30,8 @@ const Tree = ({ progress, isWithering }) => {
         zIndex: 10,
     };
     
-    if (progress < 50) {
+    // Always show the sapling when the timer is not active
+    if (!isActive || progress < 50) {
         return React.createElement('svg', {
             xmlns: "http://www.w3.org/2000/svg",
             width: currentSize,
@@ -39,11 +40,9 @@ const Tree = ({ progress, isWithering }) => {
             className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
             style: treeStyle
         },
-            React.createElement('path', { d: "M12 8C12 8 12 2 18 2C18 8 12 8 12 8", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
-            React.createElement('path', { d: "M12 8C12 8 12 2 6 2C6 8 12 8 12 8", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
-            React.createElement('line', { x1: "12", y1: "8", x2: "12", y2: "22", stroke: treeColor, strokeWidth: "2" }),
-            React.createElement('path', { d: "M12 14C12 14 12 8 18 8C18 14 12 14 12 14", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
-            React.createElement('path', { d: "M12 14C12 14 12 8 6 8C6 14 12 14 12 14", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" })
+            React.createElement('path', { d: "M7 17.9V19.9C7 21.6 8.3 22.9 10 22.9H14C15.7 22.9 17 21.6 17 19.9V17.9H7Z", fill: treeColor }),
+            React.createElement('path', { d: "M17 14.9C17 16.6 15.7 17.9 14 17.9H10C8.3 17.9 7 16.6 7 14.9C7 13.2 8.3 11.9 10 11.9H14C15.7 11.9 17 13.2 17 14.9Z", fill: treeColor }),
+            React.createElement('path', { d: "M14 11.9C15.7 11.9 17 10.6 17 8.9C17 7.2 15.7 5.9 14 5.9H13V1.9H11V5.9H10C8.3 5.9 7 7.2 7 8.9C7 10.6 8.3 11.9 10 11.9H14Z", fill: treeColor })
         );
     } else {
         return React.createElement('svg', {
@@ -124,6 +123,7 @@ const ForestTimer = () => {
     const handleSuccess = () => {
         console.log("handleSuccess called");
         setIsActive(false);
+        setIsWithering(false);
         const newTree = {
             id: Date.now(),
             plantedAt: new Date().toISOString()
@@ -139,6 +139,8 @@ const ForestTimer = () => {
         setIsActive(false);
         setIsWithering(true);
         setTimeLeft(SESSION_TIME);
+        // Add a timeout to reset the withering state and show green sapling again
+        setTimeout(() => setIsWithering(false), 3000);
     };
 
     const handleContinue = () => {
@@ -164,7 +166,7 @@ const ForestTimer = () => {
                     React.createElement('h1', { className: "text-3xl font-bold text-green-800 mb-6 text-center" }, "Focus Forest"),
                     React.createElement('div', { className: "tree-container mb-6" },
                         React.createElement('div', { className: "ground" }),
-                        React.createElement(Tree, { progress: growthProgress, isWithering: isWithering })
+                        React.createElement(Tree, { progress: growthProgress, isWithering: isWithering, isActive: isActive })
                     ),
                     React.createElement('div', { className: "timer-display mb-8" },
                         `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`
@@ -194,7 +196,7 @@ const ForestTimer = () => {
                     : React.createElement('div', { className: "grid grid-cols-2 sm:grid-cols-3 gap-6" },
                         trees.map(tree => 
                             React.createElement('div', { key: tree.id, className: "flex flex-col items-center p-4 bg-green-50 rounded-lg" },
-                                React.createElement(Tree, { progress: 100, isWithering: false }),
+                                React.createElement(Tree, { progress: 100, isWithering: false, isActive: false }),
                                 React.createElement('span', { className: "mt-2 text-sm text-green-700" },
                                     new Date(tree.plantedAt).toLocaleDateString()
                                 )
