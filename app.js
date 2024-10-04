@@ -1,3 +1,41 @@
+const { useState, useEffect, createElement: h } = React;
+
+const Sprout = ({ className, size, style }) => h('svg', {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: size,
+  height: size,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  className: className,
+  style: style
+}, [
+  h('path', { d: "M7 20h10", key: 1 }),
+  h('path', { d: "M12 20v-9", key: 2 }),
+  h('path', { d: "M9 3.6c-1.2.6-2 2-2 3.4 0 2.2 1.8 4 4 4", key: 3 }),
+  h('path', { d: "M15 3.6c1.2.6 2 2 2 3.4 0 2.2-1.8 4-4 4", key: 4 })
+]);
+
+const TreePine = ({ className, size, style }) => h('svg', {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: size,
+  height: size,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  className: className,
+  style: style
+}, [
+  h('path', { d: "m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z", key: 1 }),
+  h('path', { d: "M12 22v-3", key: 2 })
+]);
+
 const Dialog = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
     
@@ -56,6 +94,19 @@ const Tree = ({ progress, isWithering }) => {
     }
 };
 
+const WarningModal = ({ onContinue, onLeave }) => (
+    <div className="dialog-overlay">
+        <div className="dialog-content">
+            <h2 className="text-xl font-bold mb-4 text-red-600">Warning!</h2>
+            <p className="mb-6">The focus activity will fail and the tree will disintegrate if you leave this window.</p>
+            <div className="flex justify-between">
+                <button onClick={onContinue} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Continue</button>
+                <button onClick={onLeave} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Leave</button>
+            </div>
+        </div>
+    </div>
+);
+
 const ForestTimer = () => {
     const [timeLeft, setTimeLeft] = React.useState(25 * 60);
     const [isActive, setIsActive] = React.useState(false);
@@ -63,9 +114,15 @@ const ForestTimer = () => {
     const [isWithering, setIsWithering] = React.useState(false);
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
     const [showSuccess, setShowSuccess] = React.useState(false);
+    const [showWarning, setShowWarning] = React.useState(false);
+    const [isMobile, setIsMobile] = React.useState(false);
 
     const SESSION_TIME = 25 * 60;
     const growthProgress = ((SESSION_TIME - timeLeft) / SESSION_TIME) * 100;
+
+    React.useEffect(() => {
+        setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    }, []);
 
     React.useEffect(() => {
         let interval = null;
@@ -87,11 +144,37 @@ const ForestTimer = () => {
         return () => clearInterval(interval);
     }, [isActive, timeLeft]);
 
+    React.useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (isActive && document.hidden) {
+                if (isMobile) {
+                    setShowWarning(true);
+                } else {
+                    handleLeave();
+                }
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+    }, [isActive, isMobile]);
+
     const handleStart = () => {
         if (!isActive) {
             setIsActive(true);
             setIsWithering(false);
         }
+    };
+
+    const handleLeave = () => {
+        setIsActive(false);
+        setIsWithering(true);
+        setTimeLeft(SESSION_TIME);
+        setShowWarning(false);
+    };
+
+    const handleContinue = () => {
+        setShowWarning(false);
     };
 
     return (
@@ -165,6 +248,8 @@ const ForestTimer = () => {
                     <p>Your tree has grown fully. Great work on staying focused!</p>
                 </div>
             )}
+
+            {showWarning && <WarningModal onContinue={handleContinue} onLeave={handleLeave} />}
         </div>
     );
 };
