@@ -20,6 +20,7 @@ const Tree = ({ progress, isWithering, isActive }) => {
     const currentSize = baseSize + (progress / 100) * (maxSize - baseSize);
     
     const treeColor = isWithering ? '#EF4444' : (isActive ? '#15803D' : '#22C55E');
+    const trunkColor = '#8B4513';
     
     const treeStyle = {
         position: 'absolute',
@@ -40,20 +41,19 @@ const Tree = ({ progress, isWithering, isActive }) => {
             className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
             style: treeStyle
         },
-            React.createElement('path', { 
-                d: "M12 3v13M12 6l-2 2M12 6l2 2M12 10l-2 2M12 10l2 2M12 14l-2 2M12 14l2 2", 
-                stroke: treeColor,
+            // Trunk
+            React.createElement('path', {
+                d: "M12 22V12",
+                stroke: trunkColor,
                 strokeWidth: "2",
-                strokeLinecap: "round",
-                strokeLinejoin: "round",
-                fill: "none"
+                strokeLinecap: "round"
             }),
-            React.createElement('ellipse', {
-                cx: "12",
-                cy: "21",
-                rx: "5",
-                ry: "1",
-                fill: "#8B4513"
+            // Leaves
+            React.createElement('path', {
+                d: "M12 12C12 12 9 9 9 6C9 3 12 2 12 2C12 2 15 3 15 6C15 9 12 12 12 12Z",
+                fill: treeColor,
+                stroke: treeColor,
+                strokeWidth: "0.5"
             })
         );
     } else {
@@ -66,16 +66,26 @@ const Tree = ({ progress, isWithering, isActive }) => {
             className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
             style: treeStyle
         },
-            React.createElement('path', { 
-                d: "M12 2L5 22h14L12 2z", 
-                fill: treeColor 
+            // Trunk
+            React.createElement('path', {
+                d: "M12 22V8",
+                stroke: trunkColor,
+                strokeWidth: "2",
+                strokeLinecap: "round"
             }),
-            React.createElement('rect', { 
-                x: "11", 
-                y: "20", 
-                width: "2", 
-                height: "4", 
-                fill: "#8B4513" 
+            // Tree body
+            React.createElement('path', {
+                d: "M12 8C12 8 5 8 2 14C2 20 12 22 12 22C12 22 22 20 22 14C19 8 12 8 12 8Z",
+                fill: treeColor,
+                stroke: treeColor,
+                strokeWidth: "0.5"
+            }),
+            // Upper part
+            React.createElement('path', {
+                d: "M12 2C12 2 7 4 7 8C7 12 12 14 12 14C12 14 17 12 17 8C17 4 12 2 12 2Z",
+                fill: treeColor,
+                stroke: treeColor,
+                strokeWidth: "0.5"
             })
         );
     }
