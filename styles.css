@@ -134,7 +134,7 @@
     overflow-y: auto;
 }
 
-.success-message {
+.success-message, .failure-message {
     position: fixed;
     top: 20px;
     left: 50%;
@@ -146,4 +146,8 @@
     text-align: center;
     z-index: 1000;
     animation: fade-in 0.5s ease-out;
+}
+
+.failure-message {
+    background-color: #EF4444;
 }
