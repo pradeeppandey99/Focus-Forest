@@ -1,3 +1,5 @@
+console.log("app.js is loading");
+
 const Dialog = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
     
@@ -74,16 +76,20 @@ const ForestTimer = () => {
     const growthProgress = ((SESSION_TIME - timeLeft) / SESSION_TIME) * 100;
 
     React.useEffect(() => {
+        console.log("useEffect for mobile detection and visibility change is running");
         const checkMobile = () => {
             setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         };
         checkMobile();
 
         const handleVisibilityChange = () => {
+            console.log("Visibility changed, document.hidden:", document.hidden);
             if (isActive && document.hidden) {
                 if (isMobile) {
+                    console.log("Mobile device, showing warning");
                     setShowWarning(true);
                 } else {
+                    console.log("Desktop device, failing session");
                     handleFail();
                 }
             }
@@ -97,6 +103,7 @@ const ForestTimer = () => {
     }, [isActive, isMobile]);
 
     React.useEffect(() => {
+        console.log("Timer useEffect is running, isActive:", isActive, "timeLeft:", timeLeft);
         let interval = null;
         if (isActive && timeLeft > 0) {
             interval = setInterval(() => {
@@ -109,11 +116,13 @@ const ForestTimer = () => {
     }, [isActive, timeLeft]);
 
     const handleStart = () => {
+        console.log("handleStart called");
         setIsActive(true);
         setIsWithering(false);
     };
 
     const handleSuccess = () => {
+        console.log("handleSuccess called");
         setIsActive(false);
         const newTree = {
             id: Date.now(),
@@ -126,16 +135,19 @@ const ForestTimer = () => {
     };
 
     const handleFail = () => {
+        console.log("handleFail called");
         setIsActive(false);
         setIsWithering(true);
         setTimeLeft(SESSION_TIME);
     };
 
     const handleContinue = () => {
+        console.log("handleContinue called");
         setShowWarning(false);
     };
 
     const handleLeave = () => {
+        console.log("handleLeave called");
         setShowWarning(false);
         handleFail();
     };
@@ -214,4 +226,5 @@ const ForestTimer = () => {
     );
 };
 
+console.log("Rendering ForestTimer component");
 ReactDOM.render(React.createElement(ForestTimer), document.getElementById('root'));
