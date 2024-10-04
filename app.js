@@ -16,7 +16,6 @@ const ForestTimer = () => {
             setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         };
         checkMobile();
-        window.addEventListener('resize', checkMobile);
 
         const handleVisibilityChange = () => {
             if (isActive && document.hidden) {
@@ -31,31 +30,25 @@ const ForestTimer = () => {
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
-            window.removeEventListener('resize', checkMobile);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [isActive, isMobile]);
 
     React.useEffect(() => {
         let interval = null;
-        if (isActive && timeLeft > 0 && !isWithering) {
+        if (isActive && timeLeft > 0) {
             interval = setInterval(() => {
-                setTimeLeft(prevTime => prevTime - 1);
+                setTimeLeft((prevTime) => prevTime - 1);
             }, 1000);
-        } else if (timeLeft === 0 || !isActive || isWithering) {
-            clearInterval(interval);
-            if (timeLeft === 0) {
-                handleSuccess();
-            }
+        } else if (timeLeft === 0) {
+            handleSuccess();
         }
         return () => clearInterval(interval);
-    }, [isActive, timeLeft, isWithering]);
+    }, [isActive, timeLeft]);
 
     const handleStart = () => {
-        if (!isActive) {
-            setIsActive(true);
-            setIsWithering(false);
-        }
+        setIsActive(true);
+        setIsWithering(false);
     };
 
     const handleSuccess = () => {
@@ -85,9 +78,32 @@ const ForestTimer = () => {
         handleFail();
     };
 
-    // Rest of the component remains the same...
-
     return (
-        // ... (unchanged JSX)
+        <div className="min-h-screen natural-background">
+            {/* ... (rest of the JSX remains unchanged) ... */}
+
+            {showWarning && (
+                <Dialog isOpen={showWarning} onClose={() => setShowWarning(false)}>
+                    <div className="p-4">
+                        <h2 className="text-xl font-bold mb-4 text-red-600">Warning!</h2>
+                        <p className="mb-4">The focus activity will fail and the tree will disintegrate if you leave.</p>
+                        <div className="flex justify-end space-x-4">
+                            <button
+                                onClick={handleContinue}
+                                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                            >
+                                Continue
+                            </button>
+                            <button
+                                onClick={handleLeave}
+                                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                            >
+                                Leave
+                            </button>
+                        </div>
+                    </div>
+                </Dialog>
+            )}
+        </div>
     );
 };
