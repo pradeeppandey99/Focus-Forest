@@ -23,14 +23,14 @@ const Tree = ({ progress, isWithering, isActive }) => {
     
     const treeStyle = {
         position: 'absolute',
-        bottom: '0',
+        bottom: '10px',
         left: '50%',
         transform: 'translateX(-50%)',
         transition: 'all 0.5s',
         zIndex: 10,
     };
     
-    // Always show the sapling when the timer is not active
+    // Sapling shape
     if (!isActive || progress < 50) {
         return React.createElement('svg', {
             xmlns: "http://www.w3.org/2000/svg",
@@ -40,11 +40,13 @@ const Tree = ({ progress, isWithering, isActive }) => {
             className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
             style: treeStyle
         },
-            React.createElement('path', { d: "M7 17.9V19.9C7 21.6 8.3 22.9 10 22.9H14C15.7 22.9 17 21.6 17 19.9V17.9H7Z", fill: treeColor }),
-            React.createElement('path', { d: "M17 14.9C17 16.6 15.7 17.9 14 17.9H10C8.3 17.9 7 16.6 7 14.9C7 13.2 8.3 11.9 10 11.9H14C15.7 11.9 17 13.2 17 14.9Z", fill: treeColor }),
-            React.createElement('path', { d: "M14 11.9C15.7 11.9 17 10.6 17 8.9C17 7.2 15.7 5.9 14 5.9H13V1.9H11V5.9H10C8.3 5.9 7 7.2 7 8.9C7 10.6 8.3 11.9 10 11.9H14Z", fill: treeColor })
+            React.createElement('path', { 
+                d: "M12 2C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0 3c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0 3c-1.1 0-2 .9-2 2v1h4v-1c0-1.1-.9-2-2-2z", 
+                fill: treeColor 
+            })
         );
     } else {
+        // Full tree shape
         return React.createElement('svg', {
             xmlns: "http://www.w3.org/2000/svg",
             width: currentSize,
@@ -53,10 +55,17 @@ const Tree = ({ progress, isWithering, isActive }) => {
             className: `transition-all duration-500 ${isWithering ? 'animate-withering' : 'animate-grow'}`,
             style: treeStyle
         },
-            React.createElement('path', { d: "M12,2L8,9L16,9Z", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
-            React.createElement('path', { d: "M12,6L7,14L17,14Z", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
-            React.createElement('path', { d: "M12,10L6,19L18,19Z", stroke: treeColor, fill: treeColor, strokeWidth: "0.5" }),
-            React.createElement('rect', { x: "11", y: "19", width: "2", height: "3", fill: "#5B3E31" })
+            React.createElement('path', { 
+                d: "M12 2L4 20h16L12 2zm0 5l6 13H6l6-13z", 
+                fill: treeColor 
+            }),
+            React.createElement('rect', { 
+                x: "11", 
+                y: "20", 
+                width: "2", 
+                height: "3", 
+                fill: "#5B3E31" 
+            })
         );
     }
 };
