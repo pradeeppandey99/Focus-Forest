@@ -41,8 +41,19 @@ const Tree = ({ progress, isWithering, isActive }) => {
             style: treeStyle
         },
             React.createElement('path', { 
-                d: "M12 2C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0 3c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0 3c-1.1 0-2 .9-2 2v1h4v-1c0-1.1-.9-2-2-2z", 
-                fill: treeColor 
+                d: "M12 3v13M12 6l-2 2M12 6l2 2M12 10l-2 2M12 10l2 2M12 14l-2 2M12 14l2 2", 
+                stroke: treeColor,
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                fill: "none"
+            }),
+            React.createElement('ellipse', {
+                cx: "12",
+                cy: "21",
+                rx: "5",
+                ry: "1",
+                fill: "#8B4513"
             })
         );
     } else {
@@ -56,15 +67,15 @@ const Tree = ({ progress, isWithering, isActive }) => {
             style: treeStyle
         },
             React.createElement('path', { 
-                d: "M12 2L4 20h16L12 2zm0 5l6 13H6l6-13z", 
+                d: "M12 2L5 22h14L12 2z", 
                 fill: treeColor 
             }),
             React.createElement('rect', { 
                 x: "11", 
                 y: "20", 
                 width: "2", 
-                height: "3", 
-                fill: "#5B3E31" 
+                height: "4", 
+                fill: "#8B4513" 
             })
         );
     }
@@ -79,25 +90,22 @@ const ForestTimer = () => {
     const [showSuccess, setShowSuccess] = React.useState(false);
     const [showWarning, setShowWarning] = React.useState(false);
     const [isMobile, setIsMobile] = React.useState(false);
+    const [wakeLock, setWakeLock] = React.useState(null);
 
     const SESSION_TIME = 25 * 60;
     const growthProgress = ((SESSION_TIME - timeLeft) / SESSION_TIME) * 100;
 
     React.useEffect(() => {
-        console.log("useEffect for mobile detection and visibility change is running");
         const checkMobile = () => {
             setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         };
         checkMobile();
 
         const handleVisibilityChange = () => {
-            console.log("Visibility changed, document.hidden:", document.hidden);
             if (isActive && document.hidden) {
                 if (isMobile) {
-                    console.log("Mobile device, showing warning");
                     setShowWarning(true);
                 } else {
-                    console.log("Desktop device, failing session");
                     handleFail();
                 }
             }
@@ -111,7 +119,6 @@ const ForestTimer = () => {
     }, [isActive, isMobile]);
 
     React.useEffect(() => {
-        console.log("Timer useEffect is running, isActive:", isActive, "timeLeft:", timeLeft);
         let interval = null;
         if (isActive && timeLeft > 0) {
             interval = setInterval(() => {
@@ -123,14 +130,43 @@ const ForestTimer = () => {
         return () => clearInterval(interval);
     }, [isActive, timeLeft]);
 
+    React.useEffect(() => {
+        const requestWakeLock = async () => {
+            if (isActive && 'wakeLock' in navigator) {
+                try {
+                    const lock = await navigator.wakeLock.request('screen');
+                    setWakeLock(lock);
+                } catch (err) {
+                    console.error(`Failed to acquire wake lock: ${err.message}`);
+                }
+            }
+        };
+
+        const releaseWakeLock = () => {
+            if (wakeLock) {
+                wakeLock.release().then(() => {
+                    setWakeLock(null);
+                });
+            }
+        };
+
+        if (isActive) {
+            requestWakeLock();
+        } else {
+            releaseWakeLock();
+        }
+
+        return () => {
+            releaseWakeLock();
+        };
+    }, [isActive]);
+
     const handleStart = () => {
-        console.log("handleStart called");
         setIsActive(true);
         setIsWithering(false);
     };
 
     const handleSuccess = () => {
-        console.log("handleSuccess called");
         setIsActive(false);
         setIsWithering(false);
         const newTree = {
@@ -144,21 +180,17 @@ const ForestTimer = () => {
     };
 
     const handleFail = () => {
-        console.log("handleFail called");
         setIsActive(false);
         setIsWithering(true);
         setTimeLeft(SESSION_TIME);
-        // Add a timeout to reset the withering state and show green sapling again
         setTimeout(() => setIsWithering(false), 3000);
     };
 
     const handleContinue = () => {
-        console.log("handleContinue called");
         setShowWarning(false);
     };
 
     const handleLeave = () => {
-        console.log("handleLeave called");
         setShowWarning(false);
         handleFail();
     };
