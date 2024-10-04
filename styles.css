@@ -19,17 +19,9 @@
     to { transform: translateX(1000%); }
 }
 
-.animate-withering {
-    animation: withering 3s ease-in-out;
-}
-
-.animate-grow {
-    animation: grow 0.5s ease-out;
-}
-
-.animate-fade-in {
-    animation: fade-in 0.5s ease-out;
-}
+.animate-withering { animation: withering 3s ease-in-out; }
+.animate-grow { animation: grow 0.5s ease-out; }
+.animate-fade-in { animation: fade-in 0.5s ease-out; }
 
 .tree-container {
     position: relative;
@@ -50,15 +42,6 @@
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     z-index: 5;
-}
-
-.tree-container svg {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: all 0.5s;
-    z-index: 10;
 }
 
 .natural-background {
@@ -170,4 +153,18 @@
 
 .failure-message {
     background-color: #EF4444;
+}
+
+/* Updated styles for SVG trees */
+.sapling, .tree {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+}
+
+.tree {
+    display: none;
 }
