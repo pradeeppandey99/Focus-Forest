@@ -70,9 +70,9 @@ function updateTree() {
     if (progress < 50) {
         // Sapling
         treeShape = `
-            <path d="M12 18C12 18 12 12 18 12C18 18 12 18 12 18" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
-            <path d="M12 18C12 18 12 12 6 12C6 18 12 18 12 18" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
-            <line x1="12" y1="18" x2="12" y2="24" stroke="${treeColor}" stroke-width="2"/>
+            <path d="M12 ${24-progress/5} C12 ${24-progress/5} 12 ${18-progress/5} 18 ${18-progress/5} C18 ${24-progress/5} 12 ${24-progress/5} 12 ${24-progress/5}" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
+            <path d="M12 ${24-progress/5} C12 ${24-progress/5} 12 ${18-progress/5} 6 ${18-progress/5} C6 ${24-progress/5} 12 ${24-progress/5} 12 ${24-progress/5}" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
+            <line x1="12" y1="${24-progress/5}" x2="12" y2="24" stroke="${treeColor}" stroke-width="2"/>
         `;
     } else {
         // Full tree
@@ -96,6 +96,7 @@ function updateTree() {
 function resetTimer() {
     timeLeft = SESSION_TIME;
     updateTimer();
+    updateTree();
     startButton.textContent = 'Start Focus';
     startButton.disabled = false;
     startButton.classList.remove('bg-green-300', 'text-green-700', 'cursor-not-allowed');
@@ -156,7 +157,6 @@ function releaseWakeLock() {
 
 function showForest() {
     alert(`You have planted ${trees.length} trees in your forest!`);
-    // You can replace this with more advanced functionality in the future
 }
 
 // Initialize
