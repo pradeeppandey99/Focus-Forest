@@ -6,6 +6,9 @@ body, html {
 
 .min-h-screen {
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .bg-gradient-to-b {
@@ -18,9 +21,6 @@ body, html {
 
 .flex-col {
     flex-direction: column;
-    justify-content: flex-start;
-    min-height: 100vh;
-    padding: 2rem 0;
 }
 
 .items-center {
@@ -55,12 +55,12 @@ body, html {
     color: #166534;
 }
 
-.mt-8 {
-    margin-top: 1rem;
+.mt-16 {
+    margin-top: 4rem;
 }
 
 .mb-8 {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .mb-12 {
@@ -75,56 +75,38 @@ body, html {
     color: #14532d;
 }
 
-.w-48 {
+#timer {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.focus-button, .forest-button {
     width: 12rem;
-}
-
-.px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-}
-
-.py-3 {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-}
-
-.rounded-lg {
+    padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
-}
-
-.text-lg {
     font-size: 1.125rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
-.transition-all {
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-}
-
-.bg-green-500 {
+.focus-button {
     background-color: #22c55e;
-}
-
-.text-white {
     color: white;
 }
 
-.hover\:bg-green-600:hover {
+.focus-button:hover {
     background-color: #16a34a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.hover\:shadow-lg:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.bg-green-600 {
+.forest-button {
     background-color: #16a34a;
+    color: white;
 }
 
-.hover\:bg-green-700:hover {
+.forest-button:hover {
     background-color: #15803d;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .absolute {
@@ -165,7 +147,7 @@ body, html {
 
 .message {
     position: fixed;
-    top: 4rem;
+    top: 8rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 100;
