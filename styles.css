@@ -14,7 +14,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 2vh 5vw 6vh; /* Increased bottom padding significantly */
+    padding: 2vh 5vw;
     box-sizing: border-box;
 }
 
@@ -40,6 +40,7 @@ h1 {
     justify-content: flex-end;
     align-items: center;
     margin-bottom: 2vh;
+    min-height: 120px; /* Ensure minimum height for the tree */
 }
 
 #tree {
@@ -49,11 +50,12 @@ h1 {
 
 .button-container {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     gap: 1rem;
     width: 100%;
     max-width: 300px;
+    margin-top: 2vh;
+    padding-bottom: 2vh;
 }
 
 button {
@@ -124,10 +126,6 @@ button {
 }
 
 @media screen and (min-width: 768px) {
-    #app {
-        padding: 5vh 5vw;
-    }
-
     .button-container {
         flex-direction: row;
         max-width: 600px;
