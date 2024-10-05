@@ -14,7 +14,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 2vh 5vw 4vh; /* Increased bottom padding */
+    padding: 2vh 5vw 6vh; /* Increased bottom padding significantly */
     box-sizing: border-box;
 }
 
@@ -39,7 +39,7 @@ h1 {
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    position: relative; /* Added for positioning the message */
+    margin-bottom: 2vh;
 }
 
 #tree {
@@ -93,10 +93,10 @@ button {
 }
 
 .message {
-    position: absolute;
-    top: -20vh; /* Adjusted to position between timer and sapling */
+    position: fixed;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     z-index: 100;
     width: 90%;
     max-width: 28rem;
@@ -135,9 +135,5 @@ button {
 
     button {
         width: auto;
-    }
-
-    .message {
-        top: -15vh; /* Adjusted for desktop */
     }
 }
