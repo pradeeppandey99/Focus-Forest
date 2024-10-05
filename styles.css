@@ -43,8 +43,8 @@ h1 {
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    margin-bottom: 4vh;
-    min-height: 180px; /* Increased minimum height */
+    margin-bottom: 8vh;
+    min-height: 200px; /* Increased minimum height */
     z-index: 10;
 }
 
