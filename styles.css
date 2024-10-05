@@ -32,10 +32,18 @@ h1 {
     margin: 2vh 0;
 }
 
+.tree-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
 #tree {
     width: clamp(40px, 10vw, 80px);
     height: auto;
-    margin: 2vh 0;
 }
 
 .button-container {
@@ -43,9 +51,9 @@ h1 {
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
-    margin-bottom: 5vh;
     width: 100%;
     max-width: 300px;
+    margin-top: 2vh;
 }
 
 button {
@@ -123,5 +131,9 @@ button {
 
     button {
         width: auto;
+    }
+
+    .tree-container {
+        margin-bottom: 5vh;
     }
 }
