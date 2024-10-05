@@ -3,17 +3,18 @@ body, html {
     padding: 0;
     font-family: Arial, sans-serif;
     height: 100%;
+    overflow: hidden;
 }
 
 #app {
-    min-height: 100vh;
+    height: 100vh;
+    width: 100vw;
     background: linear-gradient(to bottom, #7dd3fc 0%, #7dd3fc 70%, #4ade80 70%, #4ade80 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 5vh 5vw;
-    position: relative;
+    padding: 2vh 5vw;
     box-sizing: border-box;
 }
 
@@ -21,27 +22,32 @@ h1 {
     color: #166534;
     font-size: clamp(1.5rem, 5vw, 2.5rem);
     font-weight: bold;
-    margin-top: 2vh;
-    margin-bottom: 2vh;
+    margin: 2vh 0;
 }
 
 #timer {
-    font-size: clamp(3rem, 10vw, 5rem);
+    font-size: clamp(3rem, 12vw, 5rem);
     font-weight: bold;
     color: #14532d;
-    margin: auto 0;
+    margin: 2vh 0;
+}
+
+#tree {
+    width: clamp(32px, 10vw, 80px);
+    height: auto;
+    margin: 2vh 0;
 }
 
 .button-container {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 2vh;
+    margin: 2vh 0;
     width: 100%;
 }
 
 button {
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem;
     font-size: clamp(0.8rem, 3vw, 1rem);
     font-weight: bold;
     border: none;
@@ -75,12 +81,6 @@ button {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-#tree {
-    margin-bottom: 2vh;
-    width: clamp(48px, 15vw, 120px);
-    height: auto;
-}
-
 .message {
     position: fixed;
     top: 15vh;
@@ -89,11 +89,11 @@ button {
     z-index: 100;
     width: 90%;
     max-width: 28rem;
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 0.375rem;
     text-align: center;
     font-weight: bold;
-    font-size: clamp(0.8rem, 3vw, 1rem);
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
 }
 
 .success-message {
@@ -110,31 +110,4 @@ button {
 
 .hidden {
     display: none;
-}
-
-@media (max-height: 600px) {
-    #app {
-        padding: 2vh 5vw;
-    }
-    
-    h1 {
-        margin-top: 1vh;
-        margin-bottom: 1vh;
-    }
-    
-    #timer {
-        margin: 1vh 0;
-    }
-    
-    .button-container {
-        margin-top: 1vh;
-    }
-    
-    #tree {
-        margin-bottom: 1vh;
-    }
-    
-    .message {
-        top: 10vh;
-    }
 }
