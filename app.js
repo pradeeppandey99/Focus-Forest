@@ -3,7 +3,7 @@ let isActive = false;
 let trees = [];
 let isWithering = false;
 let isDying = false;
-let wakeLock = null;
+let wakeLockRef = null;
 const SESSION_TIME = 25 * 60;
 
 const timer = document.getElementById('timer');
@@ -14,6 +14,7 @@ const successMessage = document.getElementById('successMessage');
 const failureMessage = document.getElementById('failureMessage');
 
 startButton.addEventListener('click', handleStart);
+forestButton.addEventListener('click', showForest);
 
 function handleStart() {
     if (!isActive) {
@@ -107,18 +108,14 @@ function updateForestButton() {
 
 function showSuccessMessage() {
     successMessage.classList.remove('hidden');
-    successMessage.style.display = 'block';
     setTimeout(() => {
-        successMessage.style.display = 'none';
         successMessage.classList.add('hidden');
     }, 5000);
 }
 
 function showFailureMessage() {
     failureMessage.classList.remove('hidden');
-    failureMessage.style.display = 'block';
     setTimeout(() => {
-        failureMessage.style.display = 'none';
         failureMessage.classList.add('hidden');
     }, 5000);
 }
@@ -142,21 +139,27 @@ function handleVisibilityChange() {
 
 async function requestWakeLock() {
     try {
-        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLockRef = await navigator.wakeLock.request('screen');
     } catch (err) {
         console.error(`${err.name}, ${err.message}`);
     }
 }
 
 function releaseWakeLock() {
-    if (wakeLock != null) {
-        wakeLock.release()
+    if (wakeLockRef != null) {
+        wakeLockRef.release()
             .then(() => {
-                wakeLock = null;
+                wakeLockRef = null;
             });
     }
+}
+
+function showForest() {
+    alert(`You have planted ${trees.length} trees in your forest!`);
+    // You can replace this with more advanced functionality in the future
 }
 
 // Initialize
 updateTimer();
 updateTree();
+updateForestButton();
