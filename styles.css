@@ -49,7 +49,7 @@ h1 {
 }
 
 #tree {
-    width: clamp(100px, 25vw, 250px); /* Increased size */
+    width: clamp(80px, 25vw, 150px); /* Increased size */
     height: auto;
 }
 
