@@ -14,7 +14,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 5vh 5vw;
+    padding: 2vh 5vw;
     box-sizing: border-box;
 }
 
@@ -23,6 +23,7 @@ h1 {
     font-size: clamp(1.5rem, 5vw, 2.5rem);
     font-weight: bold;
     margin-top: 2vh;
+    margin-bottom: 2vh;
 }
 
 #timer {
@@ -53,7 +54,7 @@ h1 {
     gap: 1rem;
     width: 100%;
     max-width: 300px;
-    margin-top: 2vh;
+    margin-bottom: 3vh;
 }
 
 button {
@@ -124,9 +125,14 @@ button {
 }
 
 @media screen and (min-width: 768px) {
+    #app {
+        padding: 5vh 5vw;
+    }
+
     .button-container {
         flex-direction: row;
         max-width: 600px;
+        margin-bottom: 5vh;
     }
 
     button {
