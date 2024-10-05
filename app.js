@@ -80,14 +80,14 @@ function updateTree() {
     tree.setAttribute('height', currentSize);
     
     if (progress < 50) {
+        // Sapling
         tree.innerHTML = `
-            <path d="M12 8C12 8 12 2 18 2C18 8 12 8 12 8" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
-            <path d="M12 8C12 8 12 2 6 2C6 8 12 8 12 8" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
-            <line x1="12" y1="8" x2="12" y2="24" stroke="${treeColor}" stroke-width="2"/>
-            <path d="M12 14C12 14 12 8 18 8C18 14 12 14 12 14" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
-            <path d="M12 14C12 14 12 8 6 8C6 14 12 14 12 14" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
+            <path d="M12 18C12 18 12 12 18 12C18 18 12 18 12 18" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
+            <path d="M12 18C12 18 12 12 6 12C6 18 12 18 12 18" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
+            <line x1="12" y1="18" x2="12" y2="24" stroke="${treeColor}" stroke-width="2"/>
         `;
     } else {
+        // Full tree
         tree.innerHTML = `
             <path d="M12,2L8,9L16,9Z" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
             <path d="M12,6L7,14L17,14Z" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
