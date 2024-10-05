@@ -46,21 +46,7 @@ function startTimer() {
         }
     }, 1000);
 
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden && isActive) {
-            clearInterval(interval);
-            isActive = false;
-            isWithering = true;
-            isDying = true;
-            showFailureMessage();
-            setTimeout(() => {
-                isWithering = false;
-                isDying = false;
-                resetTimer();
-            }, 5000);
-            releaseWakeLock();
-        }
-    });
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 }
 
 function updateTimer() {
@@ -79,16 +65,17 @@ function updateTree() {
     tree.setAttribute('width', currentSize);
     tree.setAttribute('height', currentSize);
     
+    let treeShape;
     if (progress < 50) {
         // Sapling
-        tree.innerHTML = `
+        treeShape = `
             <path d="M12 18C12 18 12 12 18 12C18 18 12 18 12 18" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
             <path d="M12 18C12 18 12 12 6 12C6 18 12 18 12 18" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
             <line x1="12" y1="18" x2="12" y2="24" stroke="${treeColor}" stroke-width="2"/>
         `;
     } else {
         // Full tree
-        tree.innerHTML = `
+        treeShape = `
             <path d="M12,2L8,9L16,9Z" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
             <path d="M12,6L7,14L17,14Z" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
             <path d="M12,10L6,19L18,19Z" stroke="${treeColor}" fill="${treeColor}" stroke-width="0.5"/>
@@ -96,10 +83,12 @@ function updateTree() {
         `;
     }
     
-    if (isDying) {
-        tree.classList.add('animate-disintegrate');
+    tree.innerHTML = treeShape;
+    
+    if (isWithering || isDying) {
+        tree.classList.add('animate-withering');
     } else {
-        tree.classList.remove('animate-disintegrate');
+        tree.classList.remove('animate-withering');
     }
 }
 
@@ -118,16 +107,37 @@ function updateForestButton() {
 
 function showSuccessMessage() {
     successMessage.classList.remove('hidden');
+    successMessage.style.display = 'block';
     setTimeout(() => {
+        successMessage.style.display = 'none';
         successMessage.classList.add('hidden');
     }, 5000);
 }
 
 function showFailureMessage() {
     failureMessage.classList.remove('hidden');
+    failureMessage.style.display = 'block';
     setTimeout(() => {
+        failureMessage.style.display = 'none';
         failureMessage.classList.add('hidden');
     }, 5000);
+}
+
+function handleVisibilityChange() {
+    if (document.hidden && isActive) {
+        isActive = false;
+        isWithering = true;
+        isDying = true;
+        showFailureMessage();
+        updateTree(); // Update tree immediately to show withering
+        setTimeout(() => {
+            isWithering = false;
+            isDying = false;
+            resetTimer();
+            updateTree(); // Update tree again after resetting
+        }, 5000);
+        releaseWakeLock();
+    }
 }
 
 async function requestWakeLock() {
